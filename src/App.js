@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 /* istanbul ignore file */
 import "./App.scss";
 import Page from "./pages/Home";
