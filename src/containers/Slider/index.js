@@ -8,28 +8,29 @@ import "./style.scss";
 const Slider = () => {
   const { data } = useData();
   const [index, setIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [Play, setPlay] = useState(true);
 
-  const byDateDesc = useMemo(() => {
-    if (!data?.focus) return [];
-    return data.focus
-      .slice()
-      .sort((evtA, evtB) => new Date(evtA.date) - new Date(evtB.date));
-  }, [data]);
+  const byDateDesc = useMemo(
+    () =>
+      data?.focus
+        ?.slice()
+        .sort((evtA, evtB) => new Date(evtA.date) - new Date(evtB.date)),
+    [data]
+  );
 
   useEffect(() => {
-    if (!isPlaying || byDateDesc.length === 0) {
-      return undefined; 
+    if (Play) {
+      const timeout = setTimeout(() => {
+        setIndex((prevIndex) =>
+          prevIndex < byDateDesc.length - 1 ? prevIndex + 1 : 0
+        );
+      }, 5000);
+
+      return () => clearTimeout(timeout); // Fonction de nettoyage
     }
-
-    const timeout = setTimeout(() => {
-      setIndex((prevIndex) =>
-        prevIndex < byDateDesc.length - 1 ? prevIndex + 1 : 0
-      );
-    }, 5000);
-
-    return () => clearTimeout(timeout); 
-  }, [isPlaying, byDateDesc, index]);
+    // Ajout d'un return explicite pour respecter `consistent-return`
+    return undefined;
+  }, [Play, byDateDesc, index]);
 
   if (!data?.focus) {
     return <div>Loading...</div>;
@@ -37,21 +38,17 @@ const Slider = () => {
 
   return (
     <div className="SlideCardList">
-      {isPlaying ? (
+      {Play ? (
         <FaPauseCircle
           className="icon"
-          onClick={() => setIsPlaying(false)}
+          onClick={() => setPlay(false)}
           aria-label="Pause slider"
-          role="button"
-          tabIndex="0"
         />
       ) : (
         <FaPlayCircle
           className="icon"
-          onClick={() => setIsPlaying(true)}
+          onClick={() => setPlay(true)}
           aria-label="Play slider"
-          role="button"
-          tabIndex="0"
         />
       )}
       <div>
@@ -59,7 +56,7 @@ const Slider = () => {
           <div
             key={event.id}
             className={`${
-              isPlaying ? "play-animation" : "pause-animation"
+              Play ? "play-animation" : "pause-animation"
             } SlideCard SlideCard--${index === idx ? "display" : "hide"}`}
           >
             <img src={event.cover} alt={event.title} />
@@ -76,12 +73,11 @@ const Slider = () => {
           <div className="SlideCard__pagination" />
           {byDateDesc.map((event) => (
             <input
-              key={event.id} // Correction : Utilise `event.id` comme clé unique
+              key={event.id}
               type="radio"
               name="radio-button"
               checked={index === byDateDesc.indexOf(event)}
-              onChange={() => setIndex(byDateDesc.indexOf(event))} // Permettre un clic pour changer d'index
-              aria-label={`Slide ${byDateDesc.indexOf(event) + 1}`}
+              readOnly
             />
           ))}
         </div>
