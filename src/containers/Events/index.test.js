@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { fireEvent, render, screen } from "@testing-library/react";
 import { api, DataProvider } from "../../contexts/DataContext";
 import Events from "./index";
@@ -108,4 +109,7 @@ describe("When Events is created", () => {
       await screen.findByText("1 site web dédié");
     });
   });
+  
+
+  
 });
