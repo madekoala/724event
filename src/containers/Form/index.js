@@ -17,8 +17,8 @@ const Form = ({ onSuccess, onError }) => {
   const sendContact = useCallback(
     async (evt) => {
       evt.preventDefault();
-      const data = new FormData(evt.target);
-      console.log(Object.fromEntries(data));
+      // const data = new FormData(evt.target);
+      // console.log(Object.fromEntries(data));
 
       setSending(true);
       // We try to call mockContactApi

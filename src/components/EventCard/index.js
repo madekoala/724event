@@ -25,18 +25,20 @@ const EventCard = ({
     <div className="EventCard__descriptionContainer">
       <div className="EventCard__title">{title}</div>
 
-      {/* Utilisation robuste de getMonth pour afficher correctement le mois */}
       <div className="EventCard__month">{getMonth(date)}</div>
     </div>
   </div>
 );
 
 EventCard.propTypes = {
+  // eslint-disable-next-line react/require-default-props
   imageSrc: PropTypes.string,
   imageAlt: PropTypes.string,
   date: PropTypes.instanceOf(Date).isRequired,
+  // eslint-disable-next-line react/require-default-props
   title: PropTypes.string,
   small: PropTypes.bool,
+  // eslint-disable-next-line react/require-default-props
   label: PropTypes.string,
 };
 

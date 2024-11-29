@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { FaPlayCircle, FaPauseCircle } from "react-icons/fa";
 import { useEffect, useState, useMemo } from "react";
 import { useData } from "../../contexts/DataContext";
@@ -8,55 +9,51 @@ import "./style.scss";
 const Slider = () => {
   const { data } = useData();
   const [index, setIndex] = useState(0);
-  const [Play, setPlay] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(true);
 
-  const byDateDesc = useMemo(
-    () =>
-      data?.focus
-        ?.slice()
-        .sort((evtA, evtB) => new Date(evtA.date) - new Date(evtB.date)),
+  // Trier les événements par date
+  const events = useMemo(
+    () => data?.focus?.slice().sort((a, b) => new Date(a.date) - new Date(b.date)) || [],
     [data]
   );
 
   useEffect(() => {
-    if (Play) {
-      const timeout = setTimeout(() => {
-        setIndex((prevIndex) =>
-          prevIndex < byDateDesc.length - 1 ? prevIndex + 1 : 0
-        );
-      }, 5000);
-
-      return () => clearTimeout(timeout); // Fonction de nettoyage
+    if (!isPlaying || events.length === 0) {
+      return undefined; // Résolution de l'erreur `consistent-return`
     }
-    // Ajout d'un return explicite pour respecter `consistent-return`
-    return undefined;
-  }, [Play, byDateDesc, index]);
 
-  if (!data?.focus) {
+    const timeout = setTimeout(() => {
+      setIndex((prevIndex) => (prevIndex < events.length - 1 ? prevIndex + 1 : 0));
+    }, 5000);
+
+    return () => clearTimeout(timeout); // Nettoyage du timeout
+  }, [isPlaying, events, index]);
+
+  if (events.length === 0) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className="SlideCardList">
-      {Play ? (
+      {isPlaying ? (
         <FaPauseCircle
           className="icon"
-          onClick={() => setPlay(false)}
+          onClick={() => setIsPlaying(false)}
           aria-label="Pause slider"
         />
       ) : (
         <FaPlayCircle
           className="icon"
-          onClick={() => setPlay(true)}
+          onClick={() => setIsPlaying(true)}
           aria-label="Play slider"
         />
       )}
       <div>
-        {byDateDesc.map((event, idx) => (
+        {events.map((event, idx) => (
           <div
-            key={event.id}
+            key={event.id || `event-${idx}`} // Utilisation d'une clé unique
             className={`${
-              Play ? "play-animation" : "pause-animation"
+              isPlaying ? "play-animation" : "pause-animation"
             } SlideCard SlideCard--${index === idx ? "display" : "hide"}`}
           >
             <img src={event.cover} alt={event.title} />
@@ -71,12 +68,12 @@ const Slider = () => {
         ))}
         <div className="SlideCard__paginationContainer">
           <div className="SlideCard__pagination" />
-          {byDateDesc.map((event) => (
+          {events.map((event, idx) => (
             <input
-              key={event.id}
+              key={event.id || `pagination-${idx}`} // Clé unique améliorée
               type="radio"
               name="radio-button"
-              checked={index === byDateDesc.indexOf(event)}
+              checked={index === idx}
               readOnly
             />
           ))}
