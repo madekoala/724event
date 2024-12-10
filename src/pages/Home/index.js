@@ -15,12 +15,14 @@ import Modal from "../../containers/Modal";
 import { useData } from "../../contexts/DataContext";
 
 const Page = () => {
-
   const { data } = useData();
 
-  const lastPerformance = data?.events.sort(
-    (evtA, evtB) => new Date(evtA.date) < new Date(evtB.date)
-  );
+  const lastPerformance =
+    data?.events?.length > 0
+      ? data.events.sort(
+          (evtA, evtB) => new Date(evtA.date) < new Date(evtB.date)
+        )
+      : [];
 
   return (
     <>
@@ -40,7 +42,7 @@ const Page = () => {
               Une soirée d’entreprise vous permet de réunir vos équipes pour un
               moment convivial afin de valoriser votre société en projetant une
               image dynamique. Nous vous proposons d’organiser pour vous vos
-              diners et soirée d’entreprise
+              diners et soirée d’entreprise.
             </ServiceCard>
             <ServiceCard imageSrc="/images/hall-expo.png">
               <h3>Conférences</h3>
@@ -48,25 +50,29 @@ const Page = () => {
               soit sa taille, en s’adaptant à votre demande et à vos demandes.
               En tant que spécialistes de l’évènementiel, nous saurons trouver
               le lieu parfait ainsi que des solutions inédites pour capter votre
-              audience et faire de cet évènement un succès
+              audience et faire de cet évènement un succès.
             </ServiceCard>
             <ServiceCard imageSrc="/images/sophia-sideri-LFXMtUuAKK8-unsplash1.png">
-              <h3>Experience digitale</h3>
+              <h3>Expérience digitale</h3>
               Notre agence experte en contenus immersifs offre des services de
               conseil aux entreprises, pour l’utilisation de la réalité
-              virtuelle, de la réalité augmentée et de la réalité mixte de
-              l’animation événementielle, à la veille technologique jusqu’au
-              développement de module de formation innovant
+              virtuelle, de la réalité augmentée et de la réalité mixte. De
+              l’animation événementielle à la veille technologique, jusqu’au
+              développement de modules de formation innovants.
             </ServiceCard>
           </div>
         </section>
         <section className="EventsContainer">
-          <h2 className="Title" id="nos-realisations">Nos réalisations</h2>
+          <h2 className="Title" id="nos-realisations">
+            Nos réalisations
+          </h2>
           <EventList />
         </section>
         <section className="PeoplesContainer">
-          <h2 className="Title" id="notre-equipe">Notre équipe</h2>
-          <p>Une équipe d’experts dédiés à l’ogranisation de vos événements</p>
+          <h2 className="Title" id="notre-equipe">
+            Notre équipe
+          </h2>
+          <p>Une équipe d’experts dédiés à l’organisation de vos événements</p>
           <div className="ListContainer">
             <PeopleCard
               imageSrc="/images/stephanie-liverani-Zz5LQe-VSMY-unsplash.png"
@@ -75,7 +81,7 @@ const Page = () => {
             />
             <PeopleCard
               imageSrc="/images/linkedin-sales-solutions-pAtA8xe_iVM-unsplash.png"
-              name="Jean-baptiste"
+              name="Jean-Baptiste"
               position="Directeur marketing"
             />
             <PeopleCard
@@ -107,16 +113,14 @@ const Page = () => {
               <div className="ModalMessage--success">
                 <div>Message envoyé !</div>
                 <p>
-                  Merci pour votre message nous tâcherons de vous répondre dans
-                  les plus brefs délais
+                  Merci pour votre message. Nous tâcherons de vous répondre dans
+                  les plus brefs délais.
                 </p>
               </div>
             }
           >
-            {({ setIsOpened}) => (
-               
+            {({ setIsOpened }) => (
               <Form onSuccess={() => setIsOpened(true)} onError={() => null} />
-               
             )}
           </Modal>
         </div>
@@ -124,23 +128,26 @@ const Page = () => {
       <footer className="row">
         <div className="col presta">
           <h3>Notre dernière prestation</h3>
-
-          <EventCard
-            imageSrc={lastPerformance?.[0].cover}
-            title={lastPerformance?.[0].title}
-            date={new Date(lastPerformance?.[0].date)}
-            label={lastPerformance?.[0].type}
-          />
+          {lastPerformance.length > 0 ? (
+            <EventCard
+              imageSrc={lastPerformance[0].cover}
+              title={lastPerformance[0].title}
+              date={new Date(lastPerformance[0].date)}
+              label={lastPerformance[0].type}
+            />
+          ) : (
+            <p>Aucune prestation disponible pour le moment.</p>
+          )}
         </div>
         <div className="col contact">
           <h3>Contactez-nous</h3>
-          
-          <a href="https://goo.gl/maps/FyCWp5uRpWPMeGwq9">45 avenue de la République, 75000 Paris</a>
-
-         <a href="tel:0123456789">01 23 45 67 89</a>
-         
-          <a className="mail" href="mailto:contact@77events.com"  >contact@77events.com</a>
-       
+          <a href="https://goo.gl/maps/FyCWp5uRpWPMeGwq9">
+            45 avenue de la République, 75000 Paris
+          </a>
+          <a href="tel:0123456789">01 23 45 67 89</a>
+          <a className="mail" href="mailto:contact@77events.com">
+            contact@77events.com
+          </a>
           <div>
             <a href="#twitch">
               <Icon name="twitch" />
@@ -162,7 +169,7 @@ const Page = () => {
             Une agence événementielle propose des prestations de service
             spécialisées dans la conception et l&apos;organisation de divers
             événements tels que des événements festifs, des manifestations
-            sportives et culturelles, des événements professionnels
+            sportives et culturelles, des événements professionnels.
           </p>
         </div>
       </footer>

@@ -70,7 +70,7 @@ const Slider = () => {
           <div className="SlideCard__pagination" />
           {events.map((event, idx) => (
             <input
-              key={event.id || `pagination-${idx}`} // Clé unique améliorée
+              key={event.id || `pagination-${idx}`} 
               type="radio"
               name="radio-button"
               checked={index === idx}
