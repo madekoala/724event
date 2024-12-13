@@ -19,14 +19,14 @@ const Slider = () => {
 
   useEffect(() => {
     if (!isPlaying || events.length === 0) {
-      return undefined; // Résolution de l'erreur `consistent-return`
+      return undefined; 
     }
 
     const timeout = setTimeout(() => {
       setIndex((prevIndex) => (prevIndex < events.length - 1 ? prevIndex + 1 : 0));
     }, 5000);
 
-    return () => clearTimeout(timeout); // Nettoyage du timeout
+    return () => clearTimeout(timeout); 
   }, [isPlaying, events, index]);
 
   if (events.length === 0) {
@@ -51,7 +51,7 @@ const Slider = () => {
       <div>
         {events.map((event, idx) => (
           <div
-            key={event.id || `event-${idx}`} // Utilisation d'une clé unique
+            key={event.id || `event-${idx}`} 
             className={`${
               isPlaying ? "play-animation" : "pause-animation"
             } SlideCard SlideCard--${index === idx ? "display" : "hide"}`}

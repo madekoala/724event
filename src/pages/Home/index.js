@@ -19,9 +19,8 @@ const Page = () => {
 
   const lastPerformance =
     data?.events?.length > 0
-      ? data.events.sort(
-          (evtA, evtB) => new Date(evtA.date) < new Date(evtB.date)
-        )
+      ? [...data.events] 
+          .sort((evtA, evtB) => new Date(evtB.date) - new Date(evtA.date))
       : [];
 
   return (
